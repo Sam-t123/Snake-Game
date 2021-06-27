@@ -24,13 +24,17 @@ while not game_over:
             game_over=True
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
+                delx = 0
                 dely = -10
             if event.key == pygame.K_DOWN:
+                delx = 0
                 dely = 10
             if event.key == pygame.K_LEFT:
                 delx = -10
+                dely = 0
             if event.key == pygame.K_RIGHT:
                 delx = 10
+                dely = 0
     x += delx
     y += dely
     dis.fill(screenColor)
