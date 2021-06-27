@@ -30,36 +30,24 @@ food_y = 0
 def generateFood():
     global food_x
     global food_y
-    food_x = cellSize*random.randint(0,disWidth/cellSize)
-    food_y = cellSize*random.randint(0,disHeight/cellSize)
+    food_x = cellSize*random.randint(1,(disWidth-cellSize)/cellSize)
+    food_y = cellSize*random.randint(1,(disHeight-cellSize)/cellSize)
     pygame.draw.rect(dis,foodColor,[food_x,food_y,cellSize,cellSize])
     pygame.display.update()
 
-
-
-def move(x,y,mov_x,mov_y):
-        mov_x/=cellSize
-        mov_y/=cellSize
-        for i in range(cellSize):
-            x+=mov_x
-            y+=mov_y
-            dis.fill(screenColor)
-            pygame.draw.rect(dis,foodColor,[food_x,food_y,cellSize,cellSize])
-            pygame.draw.rect(dis,snakeColor,[x,y,cellSize,cellSize])
-            pygame.display.update()
-            clock.tick(10*snakeSpeed)
+def move(snakeList):
+        for x,y in snakeList:
+            pygame.draw.rect(dis, snakeColor, [x, y, cellSize, cellSize])
 
 def gameloop():    
     game_over=False
     x = disWidth/2
     y = disHeight/2
-
     mov_x=0
     mov_y=0
 
-
-    generateFood()
-
+    snakeList = []
+    snakeLength = 1
     while not game_over:
         for event in pygame.event.get():
             # print(event)
@@ -82,13 +70,26 @@ def gameloop():
                     mov_x = cellSize
                     mov_y = 0
 
-        move(x,y,mov_x,mov_y)
+        
         x+=mov_x
         y+=mov_y
         x%=800
         y%=600
-        if x==food_x and y==food_y: generateFood() 
-            
+        dis.fill(screenColor)
+        pygame.draw.rect(dis, foodColor, [food_x, food_y, cellSize, cellSize])
+
+        snakeList.append([x,y])
+        if len(snakeList) > snakeLength:
+            del snakeList[0]
+        move(snakeList)
+        pygame.display.update()
+    
+
+        # Checks if food eaten
+        if x==food_x and y==food_y: 
+            generateFood()
+            snakeLength += 1
+        clock.tick(snakeSpeed)
     pygame.quit()
     quit()
 
