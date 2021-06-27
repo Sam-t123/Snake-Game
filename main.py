@@ -24,8 +24,19 @@ snakeSpeed = 15
 
 clock = pygame.time.Clock()
 
-food_x = cellSize*random.randint(0,disWidth/cellSize)
-food_y = cellSize*random.randint(0,disHeight/cellSize)
+food_x = 0
+food_y = 0
+
+def generateFood():
+    global food_x
+    global food_y
+    food_x = cellSize*random.randint(0,disWidth/cellSize)
+    food_y = cellSize*random.randint(0,disHeight/cellSize)
+    pygame.draw.rect(dis,foodColor,[food_x,food_y,cellSize,cellSize])
+    pygame.display.update()
+
+
+
 def move(x,y,mov_x,mov_y):
         mov_x/=cellSize
         mov_y/=cellSize
@@ -47,7 +58,7 @@ def gameloop():
     mov_y=0
 
 
-    
+    generateFood()
 
     while not game_over:
         for event in pygame.event.get():
@@ -76,7 +87,7 @@ def gameloop():
         y+=mov_y
         x%=800
         y%=600
-        if x==food_x and y==food_y: print('Tasty') 
+        if x==food_x and y==food_y: generateFood() 
             
     pygame.quit()
     quit()
