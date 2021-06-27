@@ -27,6 +27,13 @@ clock = pygame.time.Clock()
 food_x = 0
 food_y = 0
 
+def gamePause():
+    while(1):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYUP and event.key == pygame.K_p:
+                return
+
+
 def generateFood():
     global food_x
     global food_y
@@ -53,10 +60,9 @@ def gameloop():
             # print(event)
             if event.type == pygame.QUIT:
                 game_over=True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p: # Pause
-                    mov_x = 0
-                    mov_y = 0
+            if event.type == pygame.KEYUP and event.key == pygame.K_p:
+                gamePause()
+            if event.type == pygame.KEYDOWN:        
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
                     mov_x = 0
                     mov_y = -cellSize
