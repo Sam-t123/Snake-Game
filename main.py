@@ -11,6 +11,9 @@ snakeColor = (255,255,255)  # White
 screenColor = (0,0,0)       # Black
 foodColor=(255,0,0)         # Red
 
+cellSize = 10
+snakeSpeed = 15
+
 food_x = 10*random.randint(0,80)
 food_y = 10*random.randint(0,60)
 x = 400
@@ -28,23 +31,26 @@ while not game_over:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 mov_x = 0
-                mov_y = -10
+                mov_y = -cellSize
             if event.key == pygame.K_DOWN:
                 mov_x = 0
-                mov_y = 10
+                mov_y = cellSize
             if event.key == pygame.K_LEFT:
-                mov_x = -10
+                mov_x = -cellSize
                 mov_y = 0
             if event.key == pygame.K_RIGHT:
-                mov_x = 10
+                mov_x = cellSize
                 mov_y = 0
     x += mov_x
     y += mov_y
+    x%=800
+    y%=600
+
     dis.fill(screenColor)
     pygame.draw.rect(dis,snakeColor,[x,y,10,10])
     pygame.draw.rect(dis,foodColor,[food_x,food_y,10,10])
     pygame.display.update()
-    clock.tick(30)
+    clock.tick(snakeSpeed)
         
 pygame.quit()
 quit()
