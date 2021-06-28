@@ -32,7 +32,12 @@ def gamePause():
         for event in pygame.event.get():
             if event.type == pygame.KEYUP and event.key == pygame.K_p:
                 return
-
+            
+def checkSnakeHead(snakeList,snakeHead):
+    for x in snakeList[:-1]:
+            if x == snakeHead:
+                return True
+    return False
 
 def generateFood():
     global food_x
@@ -47,19 +52,23 @@ def move(snakeList):
             pygame.draw.rect(dis, snakeColor, [x, y, cellSize, cellSize])
 
 def gameloop():    
-    game_over=False
+    gameOver=False
+    gameClose = False
     x = disWidth/2
     y = disHeight/2
     mov_x=0
     mov_y=0
+    generateFood()
 
     snakeList = []
     snakeLength = 1
-    while not game_over:
+    while not gameOver:
+        while gameClose == True:
+            gameloop()
         for event in pygame.event.get():
             # print(event)
             if event.type == pygame.QUIT:
-                game_over=True
+                gameOver=True
             if event.type == pygame.KEYUP and event.key == pygame.K_p:
                 gamePause()
             if event.type == pygame.KEYDOWN:        
@@ -83,10 +92,17 @@ def gameloop():
         y%=600
         dis.fill(screenColor)
         pygame.draw.rect(dis, foodColor, [food_x, food_y, cellSize, cellSize])
-
+        
+        
         snakeList.append([x,y])
         if len(snakeList) > snakeLength:
             del snakeList[0]
+
+        
+        if checkSnakeHead(snakeList,[x,y]):
+            print(x,y)
+            gameClose =True
+
         move(snakeList)
         pygame.display.update()
     
