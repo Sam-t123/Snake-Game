@@ -2,6 +2,7 @@ import pygame.display
 import pygame.draw
 import pygame.event
 import pygame.time
+import pygame.font
 import pygame
 import random
 
@@ -27,6 +28,10 @@ clock = pygame.time.Clock()
 food_x = 0
 food_y = 0
 
+gameOver=False
+gameClose = False
+
+
 def gamePause():
     while(1):
         for event in pygame.event.get():
@@ -51,9 +56,10 @@ def move(snakeList):
         for x,y in snakeList:
             pygame.draw.rect(dis, snakeColor, [x, y, cellSize, cellSize])
 
-def gameloop():    
-    gameOver=False
-    gameClose = False
+def gameloop():
+    global gameOver
+    global gameClose
+
     x = disWidth/2
     y = disHeight/2
     mov_x=0
@@ -64,7 +70,19 @@ def gameloop():
     snakeLength = 1
     while not gameOver:
         while gameClose == True:
-            gameloop()
+            # Display Message
+            dis.fill(screenColor)
+            fontStyle = pygame.font.SysFont(None, 50)
+            message = fontStyle.render('Game Over!',True,foodColor)
+            dis.blit(message,[disWidth/2-100,disHeight/2-50])
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    gameOver = True
+                    gameloop()
+                if event.type == pygame.KEYUP and event.key == pygame.K_r:
+                    gameClose = False
+                    gameloop()      
         for event in pygame.event.get():
             # print(event)
             if event.type == pygame.QUIT:
@@ -84,8 +102,6 @@ def gameloop():
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     mov_x = cellSize
                     mov_y = 0
-
-        
         x+=mov_x
         y+=mov_y
         x%=800
@@ -100,7 +116,6 @@ def gameloop():
 
         
         if checkSnakeHead(snakeList,[x,y]):
-            print(x,y)
             gameClose =True
 
         move(snakeList)
