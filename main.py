@@ -18,7 +18,8 @@ pygame.display.set_caption('Snake Game')
 # color (R,G,B)
 snakeColor = (255,255,255)  # White
 screenColor = (0,0,0)       # Black
-foodColor=(255,0,0)         # Red
+foodColor = (255,0,0)       # Red
+textColor = (0,0,255)       # Blue
 
 cellSize = 20
 snakeSpeed = 15
@@ -31,11 +32,21 @@ food_y = 0
 gameOver=False
 gameClose = False
 
+def message(msgString,msgColor,location):
+    fontStyle = pygame.font.SysFont(None, 50)
+    message = fontStyle.render(msgString,True,msgColor)
+    dis.blit(message,location)
+    pygame.display.update()
 
-def gamePause():
+def gamePause(): 
+    message("Game Paused, Press P to continue",textColor,[100,100])
     while(1):
         for event in pygame.event.get():
             if event.type == pygame.KEYUP and event.key == pygame.K_p:
+                return
+            if event.type == pygame.QUIT:
+                global gameOver
+                gameOver = True
                 return
             
 def checkSnakeHead(snakeList,snakeHead):
@@ -64,7 +75,7 @@ def gameloop():
     y = disHeight/2
     mov_x=0
     mov_y=0
-    generateFood()
+    if not gameOver :generateFood()
 
     snakeList = []
     snakeLength = 1
@@ -72,10 +83,7 @@ def gameloop():
         while gameClose == True:
             # Display Message
             dis.fill(screenColor)
-            fontStyle = pygame.font.SysFont(None, 50)
-            message = fontStyle.render('Game Over!',True,foodColor)
-            dis.blit(message,[disWidth/2-100,disHeight/2-50])
-            pygame.display.update()
+            message('Game Over! Press R to Restart',textColor,[disWidth/2-300,disHeight/2-50])
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
                     gameOver = True
