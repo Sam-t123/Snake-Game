@@ -6,31 +6,25 @@ import pygame.font
 import pygame
 import random
 
-disWidth = 800
-disHeight = 600
-
-pygame.init()
-dis=pygame.display.set_mode((disWidth,disHeight))
-pygame.display.update()
-pygame.display.set_caption('Snake Game')
-
-
-# color (R,G,B)
+# Global Variables
+disWidth = 800              # Screen Width
+disHeight = 600             # Screen Height
 snakeColor = (255,255,255)  # White
 screenColor = (0,0,0)       # Black
 foodColor = (255,0,0)       # Red
 textColor = (0,0,255)       # Blue
-
-cellSize = 20
-snakeSpeed = 15
-
+cellSize = 20               # Size of a cell
+snakeSpeed = 15             
 clock = pygame.time.Clock()
-
-food_x = 0
+food_x = 0                 
 food_y = 0
 
 gameOver=False
 gameClose = False
+pygame.init()
+dis=pygame.display.set_mode((disWidth,disHeight))
+pygame.display.update()
+pygame.display.set_caption('Snake Game')
 
 def message(msgString,msgColor,location):
     fontStyle = pygame.font.SysFont(None, 50)
@@ -42,7 +36,7 @@ def gamePause():
     message("Game Paused, Press P to continue",textColor,[100,100])
     while(1):
         for event in pygame.event.get():
-            if event.type == pygame.KEYUP and event.key == pygame.K_p:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
                 return
             if event.type == pygame.QUIT:
                 global gameOver
@@ -75,6 +69,7 @@ def gameloop():
     y = disHeight/2
     mov_x=0
     mov_y=0
+    direction = [0,0]
     if not gameOver :generateFood()
 
     snakeList = []
@@ -83,7 +78,7 @@ def gameloop():
         while gameClose == True:
             # Display Message
             dis.fill(screenColor)
-            message('Game Over! Press R to Restart',textColor,[disWidth/2-300,disHeight/2-50])
+            message('Game Over! Press R to Restart',textColor,[disWidth/2-200,disHeight/2-50])
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
                     gameOver = True
@@ -95,21 +90,30 @@ def gameloop():
             # print(event)
             if event.type == pygame.QUIT:
                 gameOver=True
-            if event.type == pygame.KEYUP and event.key == pygame.K_p:
-                gamePause()
+            
             if event.type == pygame.KEYDOWN:        
+                if event.key == pygame.K_p:
+                    gamePause()
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
-                    mov_x = 0
-                    mov_y = -cellSize
+                    if direction != [0,cellSize]:
+                        mov_x = 0
+                        mov_y = -cellSize
+                        direction = [mov_x,mov_y]
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    mov_x = 0
-                    mov_y = cellSize
+                    if direction != [0,-cellSize]:
+                        mov_x = 0
+                        mov_y = cellSize
+                        direction = [mov_x,mov_y]
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    mov_x = -cellSize
-                    mov_y = 0
+                    if direction  != [cellSize,0]:
+                        mov_x = -cellSize
+                        mov_y = 0
+                        direction = [mov_x,mov_y]
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    mov_x = cellSize
-                    mov_y = 0
+                    if direction != [-cellSize,0]:
+                        mov_x = cellSize
+                        mov_y = 0
+                        direction = [mov_x,mov_y]
         x+=mov_x
         y+=mov_y
         x%=800
