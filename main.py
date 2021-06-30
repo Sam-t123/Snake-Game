@@ -11,8 +11,8 @@ disWidth = 800              # Screen Width
 disHeight = 600             # Screen Height
 snakeColor = (255,255,255)  # White
 screenColor = (0,0,0)       # Black
-foodColor = (255,0,0)       # Red
-textColor = (0,0,255)       # Blue
+foodColor = (0,255,0)       # Green
+textColor = (255,0,0)       # Red
 cellSize = 20               
 snakeSpeed = 15             
 clock = pygame.time.Clock()
@@ -137,8 +137,9 @@ def gameloop():
         if checkSnakeHead(snakeList,[x,y]):
             gameClose =True
 
-        displayScore(snakeLength)
         move(snakeList)
+        displayScore(snakeLength)
+        
         pygame.display.update()
     
 
